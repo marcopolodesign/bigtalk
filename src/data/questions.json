@@ -1,0 +1,122 @@
+[
+  {
+    "id": "q_001",
+    "category": "conocernos",
+    "question": "¿Qué valorás más en una pareja?",
+    "tone": "deep"
+  },
+  {
+    "id": "q_002",
+    "category": "conocernos",
+    "question": "¿Qué hábito mío te resulta adorable?",
+    "tone": "playful"
+  },
+  {
+    "id": "q_003",
+    "category": "conocernos",
+    "question": "¿Cuál fue tu primera impresión de mí?",
+    "tone": "reflective"
+  },
+  {
+    "id": "q_004",
+    "category": "conocernos",
+    "question": "¿Qué momento nuestro te gustaría revivir?",
+    "tone": "nostalgic"
+  },
+  {
+    "id": "q_005",
+    "category": "conocernos",
+    "question": "¿En qué somos más distintos?",
+    "tone": "curious"
+  },
+  {
+    "id": "q_006",
+    "category": "emocional",
+    "question": "¿Qué necesitás cuando estás triste?",
+    "tone": "intimate"
+  },
+  {
+    "id": "q_007",
+    "category": "emocional",
+    "question": "¿Qué parte de nuestra relación valorás más y no lo decís seguido?",
+    "tone": "honest"
+  },
+  {
+    "id": "q_008",
+    "category": "emocional",
+    "question": "¿Cómo puedo ser mejor compañero/a para vos?",
+    "tone": "supportive"
+  },
+  {
+    "id": "q_009",
+    "category": "emocional",
+    "question": "¿Hay algo que te haya dolido y no me lo dijiste?",
+    "tone": "vulnerable"
+  },
+  {
+    "id": "q_010",
+    "category": "emocional",
+    "question": "¿Qué aprendiste sobre vos desde que estamos juntos?",
+    "tone": "reflective"
+  },
+  {
+    "id": "q_011",
+    "category": "sensual",
+    "question": "¿Qué parte de mi cuerpo te atrae más?",
+    "tone": "sensual"
+  },
+  {
+    "id": "q_012",
+    "category": "sensual",
+    "question": "¿Qué fantasía tenés conmigo?",
+    "tone": "intimate"
+  },
+  {
+    "id": "q_013",
+    "category": "sensual",
+    "question": "¿Qué momento íntimo conmigo no podés olvidar?",
+    "tone": "warm"
+  },
+  {
+    "id": "q_014",
+    "category": "sensual",
+    "question": "¿Preferís ternura o intensidad en el sexo?",
+    "tone": "curious"
+  },
+  {
+    "id": "q_015",
+    "category": "sensual",
+    "question": "¿Qué harías si estuviéramos solos y nadie pudiera vernos por una hora?",
+    "tone": "teasing"
+  },
+  {
+    "id": "q_016",
+    "category": "juguetón",
+    "question": "¿Qué emoji me describe mejor en la cama?",
+    "tone": "sarcastic"
+  },
+  {
+    "id": "q_017",
+    "category": "juguetón",
+    "question": "Si fuera un trago, ¿cuál sería mi receta?",
+    "tone": "funny"
+  },
+  {
+    "id": "q_018",
+    "category": "juguetón",
+    "question": "¿Qué superpoder usarías en una cita conmigo?",
+    "tone": "playful"
+  },
+  {
+    "id": "q_019",
+    "category": "juguetón",
+    "question": "¿Qué harías si intercambiáramos cuerpos por un día?",
+    "tone": "weird-fun"
+  },
+  {
+    "id": "q_020",
+    "category": "juguetón",
+    "question": "¿Qué harías si te despertaras y fueras yo?",
+    "tone": "absurd"
+  }
+]
