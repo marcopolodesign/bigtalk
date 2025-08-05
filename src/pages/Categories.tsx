@@ -62,8 +62,8 @@ export const Categories: React.FC = () => {
           </svg>
         </button>
         
-        {/* BIG TALK in Monument Extended Bold */}
-        <h1 className="font-monument text-lg tracking-wider">BIG TALK</h1>
+        {/* PILLOW TALK in Monument Extended Bold */}
+        <h1 className="font-monument text-lg tracking-wider">PILLOW TALK</h1>
         
         {/* Question counter */}
         <div className="font-interphases-mono text-sm text-gray-600">

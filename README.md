@@ -1,4 +1,4 @@
-# Big Talk - Digital Question Game �
+# Pillow Talk - Digital Question Game 💬 Big Talk - Digital Question Game �
 
 A beautiful, mobile-first web application for meaningful conversations. Choose a category, get a thought-provoking question, and deepen your connections with others.
 
@@ -78,7 +78,7 @@ The app uses a carefully crafted color scheme inspired by the original En Palabr
 
 ## 📱 Usage
 
-1. **Welcome Screen**: Start the experience with Big Talk
+1. **Welcome Screen**: Start the experience with Pillow Talk
 2. **Category Selection**: Choose question types
 3. **Question Display**: View one question at a time with swipe interactions
 4. **Return to Categories**: After each question, select a new category

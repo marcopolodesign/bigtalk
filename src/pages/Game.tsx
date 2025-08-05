@@ -54,7 +54,7 @@ export const Game: React.FC = () => {
     setOtherPlayer(getOtherPlayer());
     
     // Get initial progress from localStorage
-    const savedData = localStorage.getItem('bigTalkProgress');
+    const savedData = localStorage.getItem('pillowTalkProgress');
     if (savedData) {
       const data = JSON.parse(savedData);
       setProgress(data.answeredQuestions?.length || 0);
@@ -204,8 +204,8 @@ export const Game: React.FC = () => {
 
   const handleRestart = () => {
     // Clear all game data and go back to player setup
-    localStorage.removeItem('bigTalkProgress');
-    localStorage.removeItem('bigTalkPlayers');
+    localStorage.removeItem('pillowTalkProgress');
+    localStorage.removeItem('pillowTalkPlayers');
     navigate('/setup');
   };
 
@@ -225,7 +225,7 @@ export const Game: React.FC = () => {
       {/* Header */}
       <div className="flex items-center justify-between mb-6 pt-2">
         <h1 className="text-3xl font-bold text-black" style={{ fontFamily: 'Wulkan Display, serif', fontWeight: 700 }}>
-          BIG TALK
+          PILLOW TALK
         </h1>
         <div className="flex items-center gap-3 text-right text-black">
           <span 

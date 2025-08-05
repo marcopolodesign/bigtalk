@@ -123,7 +123,7 @@ export const Home: React.FC = () => {
           animate={{ opacity: 1, scale: 1 }}
           transition={{ delay: 0.2, duration: 0.6 }}
         >
-          Big Talk
+          Pillow Talk
         </motion.h1>
 
         {/* Subtitle */}

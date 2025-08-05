@@ -34,8 +34,8 @@ export const PlayerSetup: React.FC = () => {
           </svg>
         </button>
         
-        {/* BIG TALK title */}
-        <h1 className="text-2xl font-bold text-black tracking-wider">BIG TALK</h1>
+        {/* PILLOW TALK title */}
+        <h1 className="text-2xl font-bold text-black tracking-wider">PILLOW TALK</h1>
         
         <div className="w-8 h-8"></div> {/* Spacer */}
       </div>

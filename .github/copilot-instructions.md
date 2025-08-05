@@ -1,8 +1,8 @@
 <!-- Use this file to provide workspace-specific custom instructions to Copilot. For more details, visit https://code.visualstudio.com/docs/copilot/copilot-customization#_use-a-githubcopilotinstructionsmd-file -->
 
-# Big Talk - Question Game App
+# Pillow Talk - Question Game App
 
-This is a mobile-first React + TypeScript + Tailwind CSS application for meaningful conversations called "Big Talk".
+This is a mobile-first React + TypeScript + Tailwind CSS application for meaningful conversations called "Pillow Talk".
 
 ## Project Guidelines
 

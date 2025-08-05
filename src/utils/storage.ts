@@ -1,4 +1,4 @@
-// Storage utilities for Big Talk game
+// Storage utilities for Pillow Talk game
 
 export interface Player {
   name: string;
@@ -6,17 +6,25 @@ export interface Player {
 }
 
 export interface GameState {
+  players: Player[];
+  currentPlayerIndex: number;
+  totalQuestions: number;
+  rewards: string[];
   questionsAnswered: number;
   currentRewardIndex: number;
   userQuestions: string[];
-  players: Player[];
-  currentPlayerIndex: number;
   gameStarted: boolean;
 }
 
+export interface Question {
+  id: string;
+  question: string;
+  category: string;
+}
+
 const STORAGE_KEYS = {
-  GAME_STATE: 'big-talk-game-state',
-  USER_QUESTIONS: 'big-talk-user-questions'
+  GAME_STATE: 'pillow-talk-game-state',
+  USER_QUESTIONS: 'pillow-talk-user-questions'
 };
 
 // Reward suggestions that unlock every 10 questions
@@ -50,6 +58,8 @@ export const getGameState = (): GameState => {
     userQuestions: [],
     players: [],
     currentPlayerIndex: 0,
+    totalQuestions: 0,
+    rewards: [],
     gameStarted: false
   };
 };
