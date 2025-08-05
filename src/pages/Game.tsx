@@ -7,7 +7,26 @@ import { incrementQuestions, getCurrentPlayer, switchTurn, type Player } from '.
 import questionsData from '../data/questions.json';
 import type { Category } from '../components/CategorySelector';
 
-const categoryColors = {
+const categoryHexColors = {
+  conocernos: '#EAC86F',
+  emocional: '#F5D0D0',
+  divertido: '#B9A3D5',
+  picante: '#8D2C2C',
+  aleatorio: '#A73936'
+};
+
+const getCategoryColor = (category: string): string => {
+  return categoryHexColors[category as keyof typeof categoryHexColors] || '#A73936';
+};
+
+const getCategoryGradient = (category: string): string => {
+  if (category === 'picante') {
+    return 'linear-gradient(180deg, #EE0F0F -24.97%, #FFB2A2 50%)';
+  }
+  return `linear-gradient(180deg, ${getCategoryColor(category)} -.47%, #FFF 70%)`;
+};
+
+const categoryButtonColors = {
   conocernos: 'bg-conocernos',
   emocional: 'bg-emocional',
   divertido: 'bg-jugueton',
@@ -407,11 +426,14 @@ export const Game: React.FC = () => {
                 className="absolute top-0 left-0 right-0"
                 style={{ zIndex }}
               >
-                <div className={`w-full rounded-2xl ${categoryColors[cardState.question.category]} p-6 flex flex-col shadow-lg`}>
+                <div className={`w-full rounded-2xl p-6 flex flex-col shadow-lg`} 
+                     style={{ 
+                       background: getCategoryGradient(cardState.question.category)
+                     }}>
                   {/* Category badge */}
                   <div className="flex justify-start mb-5">
                     <span 
-                      className="inline-block px-2 py-2 bg-white bg-opacity-20 text-white rounded-full uppercase tracking-tight"
+                      className="inline-block px-2 py-2 bg-black bg-opacity-10 text-black rounded-full uppercase tracking-tight"
                       style={{ 
                         fontFamily: 'TT Interphases Pro Mono, monospace',
                         fontSize: '14px',
@@ -427,7 +449,7 @@ export const Game: React.FC = () => {
                   {/* Question text and player info */}
                   <div className={`flex flex-col text-left mt-auto ${!isActive ? 'opacity-0' : ''}`}>
                     <h2 
-                      className="text-white text-left mb-5"
+                      className="text-black text-left mb-5"
                       style={{ 
                         fontFamily: 'Wulkan Display, serif',
                         fontSize: '32px',
@@ -443,7 +465,7 @@ export const Game: React.FC = () => {
                     {isActive && currentPlayer && (
                       <div className="flex flex-row justify-between items-center w-full">
                         <p 
-                          className="text-white opacity-90 mt-auto"
+                          className="text-black opacity-90 mt-auto"
                           style={{ 
                             fontFamily: 'TT Interphases Pro, sans-serif',
                             fontSize: '16px',
@@ -466,7 +488,7 @@ export const Game: React.FC = () => {
                             rotate: { duration: 0.5 }, 
                             scale: { duration: 0.2 }
                           }}
-                          className="text-white opacity-80 hover:opacity-100 p-2"
+                          className="text-black opacity-80 hover:opacity-100 p-2"
                         >
                           <svg 
                             xmlns="http://www.w3.org/2000/svg" 
@@ -520,7 +542,7 @@ export const Game: React.FC = () => {
                     onClick={() => handleCategorySelect(category.id as Category)}
                     whileTap={{ scale: 0.95 }}
                     className={`p-2 rounded-full text-white font-medium text-xs uppercase tracking-wide font-interphases-mono
-                      ${categoryColors[category.id as Category]}`}
+                      ${categoryButtonColors[category.id as Category]}`}
                   >
                     {category.name}
                   </motion.button>
