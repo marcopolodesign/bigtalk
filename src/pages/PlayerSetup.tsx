@@ -17,27 +17,12 @@ export const PlayerSetup: React.FC = () => {
     }
   };
 
-  const handleBack = () => {
-    navigate('/');
-  };
-
   return (
     <div className="min-h-screen p-6">
       {/* Header */}
-      <div className="flex items-center justify-between mb-8 pt-2">
-        <button
-          onClick={handleBack}
-          className="p-2 rounded-full bg-white text-gray-700 hover:bg-gray-100 shadow-md transition-all"
-        >
-          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-          </svg>
-        </button>
-        
+      <div className="flex items-center justify-center mb-8 pt-2">
         {/* PILLOW TALK title */}
         <h1 className="text-2xl font-bold text-black tracking-wider">PILLOW TALK</h1>
-        
-        <div className="w-8 h-8"></div> {/* Spacer */}
       </div>
 
       {/* Player Setup Form */}
@@ -138,7 +123,9 @@ export const PlayerSetup: React.FC = () => {
         >
           <p className="text-sm text-blue-700 text-center">
             <span className="font-semibold">💡 Cómo funciona:</span><br />
-            Se turnan para hacer y responder preguntas. El que pregunta elige la categoría.
+            Se turnan para hacer y responder preguntas. El que pregunta elige la categoría.<br /><br />
+            🎁 Desbloquea ideas: Cada 5 preguntas obtienes una sorpresa<br /><br />
+            💕 Conecta: Hablen, rían y conózcanse mejor
           </p>
         </motion.div>
       </motion.div>

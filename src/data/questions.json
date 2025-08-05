@@ -118,5 +118,365 @@
     "category": "divertido",
     "question": "¿Qué harías si te despertaras y fueras yo?",
     "tone": "absurd"
+  },
+  {
+    "id": "q_021",
+    "category": "emocional",
+    "question": "¿De qué manera han influido tus padres en tu elección de parejas?",
+    "tone": "deep"
+  },
+  {
+    "id": "q_022",
+    "category": "emocional",
+    "question": "¿Cuáles son tus metas más profundas en la vida?",
+    "tone": "aspirational"
+  },
+  {
+    "id": "q_023",
+    "category": "emocional",
+    "question": "¿Qué es lo que más admirás de mí?",
+    "tone": "appreciative"
+  },
+  {
+    "id": "q_024",
+    "category": "emocional",
+    "question": "¿Cómo te gusta que volvamos a conectar al final de cada día?",
+    "tone": "intimate"
+  },
+  {
+    "id": "q_025",
+    "category": "conocernos",
+    "question": "¿Preferirías tener vista al desierto o al mar? ¿Por qué?",
+    "tone": "curious"
+  },
+  {
+    "id": "q_026",
+    "category": "conocernos",
+    "question": "¿Qué lugar inusual te gustaría visitar conmigo?",
+    "tone": "adventurous"
+  },
+  {
+    "id": "q_027",
+    "category": "conocernos",
+    "question": "¿Cuál es tu mayor sueño profesional?",
+    "tone": "aspirational"
+  },
+  {
+    "id": "q_028",
+    "category": "divertido",
+    "question": "Si fuéramos personajes de una película, ¿de cuál sería?",
+    "tone": "playful"
+  },
+  {
+    "id": "q_029",
+    "category": "divertido",
+    "question": "¿Qué animal sería yo y por qué?",
+    "tone": "funny"
+  },
+  {
+    "id": "q_030",
+    "category": "divertido",
+    "question": "¿Cuál sería nuestro baile secreto?",
+    "tone": "silly"
+  },
+  {
+    "id": "q_031",
+    "category": "picante",
+    "question": "¿Qué parte de tu cuerpo te preocupa que pueda desalentar a tu pareja?",
+    "tone": "vulnerable"
+  },
+  {
+    "id": "q_032",
+    "category": "picante",
+    "question": "¿En qué te sentís avergonzado/a o culpable respecto al sexo?",
+    "tone": "honest"
+  },
+  {
+    "id": "q_033",
+    "category": "picante",
+    "question": "¿Qué lugar un poco inusual te gustaría para tener sexo?",
+    "tone": "adventurous"
+  },
+  {
+    "id": "q_034",
+    "category": "picante",
+    "question": "¿Qué tipo de dinámicas de poder te excitan?",
+    "tone": "intimate"
+  },
+  {
+    "id": "q_035",
+    "category": "picante",
+    "question": "Algo sobre lo que soy muy inhibido/a es...",
+    "tone": "vulnerable"
+  },
+  {
+    "id": "q_036",
+    "category": "picante",
+    "question": "Para ponerme más en clima para el sexo, me ayudaría si...",
+    "tone": "practical"
+  },
+  {
+    "id": "q_037",
+    "category": "emocional",
+    "question": "¿Qué estás listo/a a perdonar en nuestra relación?",
+    "tone": "forgiving"
+  },
+  {
+    "id": "q_038",
+    "category": "emocional",
+    "question": "El truco para entender por qué a veces puedo ser difícil es recordar que...",
+    "tone": "understanding"
+  },
+  {
+    "id": "q_039",
+    "category": "conocernos",
+    "question": "¿Qué tradición familiar tuya te gustaría que adoptáramos?",
+    "tone": "cultural"
+  },
+  {
+    "id": "q_040",
+    "category": "conocernos",
+    "question": "¿Cuál es tu mayor miedo sobre el futuro?",
+    "tone": "vulnerable"
+  },
+  {
+    "id": "q_041",
+    "category": "conocernos",
+    "question": "¿Qué habilidad te gustaría aprender juntos?",
+    "tone": "growth"
+  },
+  {
+    "id": "q_042",
+    "category": "emocional",
+    "question": "¿Cuándo te sentís más conectado/a conmigo?",
+    "tone": "intimate"
+  },
+  {
+    "id": "q_043",
+    "category": "emocional",
+    "question": "¿Qué te hace sentir verdaderamente amado/a?",
+    "tone": "loving"
+  },
+  {
+    "id": "q_044",
+    "category": "emocional",
+    "question": "Si nunca mejorara nada, yo igual...",
+    "tone": "accepting"
+  },
+  {
+    "id": "q_045",
+    "category": "divertido",
+    "question": "¿Cuál sería nuestro reality show ideal?",
+    "tone": "silly"
+  },
+  {
+    "id": "q_046",
+    "category": "divertido",
+    "question": "Si tuviéramos una banda, ¿cómo se llamaría?",
+    "tone": "creative"
+  },
+  {
+    "id": "q_047",
+    "category": "divertido",
+    "question": "¿Qué comida describe mejor nuestra relación?",
+    "tone": "metaphorical"
+  },
+  {
+    "id": "q_048",
+    "category": "conocernos",
+    "question": "¿En qué momento te diste cuenta de que me querías?",
+    "tone": "romantic"
+  },
+  {
+    "id": "q_049",
+    "category": "conocernos",
+    "question": "¿Qué creencia tuya ha cambiado desde que estamos juntos?",
+    "tone": "growth"
+  },
+  {
+    "id": "q_050",
+    "category": "conocernos",
+    "question": "¿Cuál es tu lugar favorito en el mundo y por qué?",
+    "tone": "reflective"
+  },
+  {
+    "id": "q_051",
+    "category": "emocional",
+    "question": "¿Qué es lo que más te cuesta perdonarte a vos mismo/a?",
+    "tone": "deep"
+  },
+  {
+    "id": "q_052",
+    "category": "emocional",
+    "question": "¿Cómo querés que te apoye cuando estás pasando por un momento difícil?",
+    "tone": "supportive"
+  },
+  {
+    "id": "q_053",
+    "category": "emocional",
+    "question": "¿Qué parte de tu pasado te gustaría que comprenda mejor?",
+    "tone": "understanding"
+  },
+  {
+    "id": "q_054",
+    "category": "divertido",
+    "question": "¿Cuál sería nuestro superhéroe conjunto y cuáles serían nuestros poderes?",
+    "tone": "imaginative"
+  },
+  {
+    "id": "q_055",
+    "category": "divertido",
+    "question": "Si fuéramos robots, ¿qué función especial tendrías?",
+    "tone": "sci-fi"
+  },
+  {
+    "id": "q_056",
+    "category": "divertido",
+    "question": "¿Qué travesura haríamos si fuéramos invisibles por un día?",
+    "tone": "mischievous"
+  },
+  {
+    "id": "q_057",
+    "category": "picante",
+    "question": "¿Cuál es tu fantasía más recurrente?",
+    "tone": "intimate"
+  },
+  {
+    "id": "q_058",
+    "category": "picante",
+    "question": "¿Qué es lo más espontáneo que te gustaría hacer en la intimidad?",
+    "tone": "adventurous"
+  },
+  {
+    "id": "q_059",
+    "category": "conocernos",
+    "question": "¿Qué libro o película cambió tu forma de ver el mundo?",
+    "tone": "intellectual"
+  },
+  {
+    "id": "q_060",
+    "category": "conocernos",
+    "question": "¿Cuál es tu recuerdo de la infancia más feliz?",
+    "tone": "nostalgic"
+  },
+  {
+    "id": "q_061",
+    "category": "conocernos",
+    "question": "¿En qué situaciones te sentís más vos mismo/a?",
+    "tone": "authentic"
+  },
+  {
+    "id": "q_062",
+    "category": "emocional",
+    "question": "¿Qué es lo que más te asusta de envejecer?",
+    "tone": "vulnerable"
+  },
+  {
+    "id": "q_063",
+    "category": "emocional",
+    "question": "¿Cuándo fue la última vez que lloraste y por qué?",
+    "tone": "emotional"
+  },
+  {
+    "id": "q_064",
+    "category": "emocional",
+    "question": "¿Qué cualidad mía te sorprendió más cuando nos conocimos?",
+    "tone": "discovering"
+  },
+  {
+    "id": "q_065",
+    "category": "divertido",
+    "question": "Si pudiéramos vivir en cualquier época histórica, ¿cuál elegirías?",
+    "tone": "historical"
+  },
+  {
+    "id": "q_066",
+    "category": "divertido",
+    "question": "¿Cuál sería nuestro negocio familiar ideal?",
+    "tone": "entrepreneurial"
+  },
+  {
+    "id": "q_067",
+    "category": "divertido",
+    "question": "Si tuviéramos que sobrevivir en una isla desierta, ¿cuál sería tu estrategia?",
+    "tone": "survival"
+  },
+  {
+    "id": "q_068",
+    "category": "picante",
+    "question": "¿Qué es lo más atrevido que te gustaría intentar?",
+    "tone": "daring"
+  },
+  {
+    "id": "q_069",
+    "category": "conocernos",
+    "question": "¿Qué te hace sentir más orgulloso/a de vos mismo/a?",
+    "tone": "proud"
+  },
+  {
+    "id": "q_070",
+    "category": "conocernos",
+    "question": "¿Cuál fue el momento más transformador de tu vida?",
+    "tone": "pivotal"
+  },
+  {
+    "id": "q_071",
+    "category": "emocional",
+    "question": "¿Qué aspecto de nuestra relación te da más tranquilidad?",
+    "tone": "secure"
+  },
+  {
+    "id": "q_072",
+    "category": "emocional",
+    "question": "¿Cuándo amigos apreciativos hablan de nosotros, qué crees que celebran?",
+    "tone": "perspective"
+  },
+  {
+    "id": "q_073",
+    "category": "emocional",
+    "question": "¿Qué sacrificio estarías dispuesto/a a hacer por nuestra relación?",
+    "tone": "commitment"
+  },
+  {
+    "id": "q_074",
+    "category": "divertido",
+    "question": "¿Cuál sería nuestro documental de Netflix ideal?",
+    "tone": "modern"
+  },
+  {
+    "id": "q_075",
+    "category": "divertido",
+    "question": "Si fuéramos un dúo cómico, ¿quién haría de qué?",
+    "tone": "comedic"
+  },
+  {
+    "id": "q_076",
+    "category": "picante",
+    "question": "¿Qué momento de seducción recordás con más cariño?",
+    "tone": "romantic"
+  },
+  {
+    "id": "q_077",
+    "category": "picante",
+    "question": "¿El problema de la infidelidad es que lastima a la otra persona, o está mal en sí mismo?",
+    "tone": "philosophical"
+  },
+  {
+    "id": "q_078",
+    "category": "conocernos",
+    "question": "¿Qué decisión difícil te gustaría que tomáramos juntos?",
+    "tone": "partnership"
+  },
+  {
+    "id": "q_079",
+    "category": "conocernos",
+    "question": "¿En qué aspectos somos más parecidos de lo que pensamos?",
+    "tone": "similarities"
+  },
+  {
+    "id": "q_080",
+    "category": "emocional",
+    "question": "¿Qué lección sobre el amor has aprendido conmigo?",
+    "tone": "wisdom"
   }
 ]
