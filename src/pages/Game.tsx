@@ -49,7 +49,7 @@ export const Game: React.FC = () => {
   // Initialize questions based on selected categories
   useEffect(() => {
     const allQuestions = questionsData as Question[];
-    
+    console.log(otherPlayer)
     // Load players info
     setCurrentPlayer(getCurrentPlayer());
     setOtherPlayer(getOtherPlayer());
