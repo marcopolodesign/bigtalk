@@ -20,6 +20,7 @@ const categoryData = [
   { id: 'emocional', name: 'EMOCIONAL', emoji: '💭' },
   { id: 'sensual', name: 'SENSUAL', emoji: '💋' },
   { id: 'juguetón', name: 'JUGUETÓN', emoji: '🎪' },
+  { id: 'aleatorio', name: 'ALEATORIO', emoji: '🎲' },
 ];
 
 export const Game: React.FC = () => {
@@ -40,6 +41,8 @@ export const Game: React.FC = () => {
   const [otherPlayer, setOtherPlayer] = useState<Player | null>(null);
   const [progress, setProgress] = useState(0);
   const [showCategorySelection, setShowCategorySelection] = useState(true);
+  const [cardRotations, setCardRotations] = useState<Record<string, number>>({});
+  const [isAnimating, setIsAnimating] = useState(false);
 //   const [isResetting, setIsResetting] = useState(false);
 
   // Initialize questions based on selected categories
@@ -76,6 +79,11 @@ export const Game: React.FC = () => {
     // Set the first question as current
     if (shuffled.length > 0) {
       setCurrentQuestion(shuffled[0]);
+      // Store rotation for the initial question
+      setCardRotations(prev => ({
+        ...prev,
+        [shuffled[0].id]: Math.random() * 6 - 3 // Random rotation between -3 and 3 degrees
+      }));
     }
   }, [selectedCategories]);
 
@@ -96,6 +104,9 @@ export const Game: React.FC = () => {
     
     // Wait for fade out animation
     await new Promise(resolve => setTimeout(resolve, 300));
+    
+    // Start animating flag
+    setIsAnimating(true);
     
     // Increment progress when selecting next question
     setProgress(prev => prev + 1);
@@ -124,6 +135,14 @@ export const Game: React.FC = () => {
     if (availableQuestions.length > 0) {
       const randomQuestion = availableQuestions[Math.floor(Math.random() * availableQuestions.length)];
       
+      // Store rotation for the new question if it doesn't exist
+      if (!cardRotations[randomQuestion.id]) {
+        setCardRotations(prev => ({
+          ...prev,
+          [randomQuestion.id]: Math.random() * 6 - 3 // Random rotation between -3 and 3 degrees
+        }));
+      }
+      
       // Add current question to stack and set new question
       if (currentQuestion) {
         setCardStack(prev => [...prev, currentQuestion]);
@@ -134,13 +153,15 @@ export const Game: React.FC = () => {
       if (progress >= 5) {
         setCurrentReward('¡Felicitaciones! Completaron una conversación increíble');
         setShowReward(true);
+        setIsAnimating(false);
         return;
       }
       
-      // Fade in category selection after card animation
+      // Wait for new card animation to complete, then fade previous cards and show category selection
       setTimeout(() => {
+        setIsAnimating(false);
         setShowCategorySelection(true);
-      }, 600);
+      }, 1000); // Wait for spring animation to settle
     }
   };
 
@@ -152,6 +173,7 @@ export const Game: React.FC = () => {
       // Reset everything for a new round
       setProgress(0);
       setCardStack([]);
+      setCardRotations({}); // Clear stored rotations
       
       // Get a new random question
       const allQuestions = questionsData as Question[];
@@ -168,6 +190,11 @@ export const Game: React.FC = () => {
       const shuffled = [...filteredQuestions].sort(() => Math.random() - 0.5);
       if (shuffled.length > 0) {
         setCurrentQuestion(shuffled[0]);
+        // Store rotation for the new question
+        setCardRotations(prev => ({
+          ...prev,
+          [shuffled[0].id]: Math.random() * 6 - 3 // Random rotation between -3 and 3 degrees
+        }));
       }
       
       // Show category selection again
@@ -247,16 +274,20 @@ export const Game: React.FC = () => {
           // index 1 = second card = translateY(55px) 
           // index 2 = third card (top of stack) = translateY(110px)
           const yOffset = index * 55;
-          const randomRotation = Math.random() * 6 - 3; // Random rotation between -3 and 3 degrees
+          const rotation = cardRotations[card.id] || 0; // Use stored rotation or 0 as fallback
+          const isTopCard = index === cardStack.slice(-3).length - 1; // Check if this is the most recent card in stack
+          const opacity = isAnimating && isTopCard ? 1 : 0.3; // Keep full opacity for top card during animation
           
           return (
             <motion.div
               key={`stack-${card.id}`}
               className="absolute inset-0"
+              initial={isAnimating && isTopCard ? { opacity: 1 } : undefined}
+              animate={{ opacity }}
+              transition={{ duration: 0.3, delay: isAnimating && isTopCard ? 0.7 : 0 }} // Delay fade for top card
               style={{
                 zIndex: index,
-                transform: `translateY(${yOffset}px) rotate(${randomRotation}deg)`,
-                opacity: 0.3
+                transform: `translateY(${yOffset}px) rotate(${rotation}deg)`,
               }}
             >
               <div className={`w-full h-full rounded-2xl ${categoryColors[card.category as keyof typeof categoryColors]} p-6 flex flex-col justify-between shadow-lg`}>
@@ -289,12 +320,12 @@ export const Game: React.FC = () => {
               initial={{ 
                 y: `100vh`, // Start from bottom of viewport
                 opacity: 0,
-                rotate: Math.random() * 10 - 5 // Random rotation between -5 and 5 degrees
+                rotate: cardRotations[currentQuestion.id] || 0 // Use stored rotation
               }}
               animate={{ 
                 y: Math.min(cardStack.length, 3) * 55, // Dynamic position based on stack size, max 3 cards (165px)
                 opacity: 1,
-                rotate: Math.random() * 6 - 3 // Random rotation between -3 and 3 degrees when settled
+                rotate: cardRotations[currentQuestion.id] || 0 // Use stored rotation
               }}
               exit={{ 
                 opacity: 0.3
