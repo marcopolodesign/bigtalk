@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { type Question } from '../components/Card';
 import { RewardModal } from '../components/RewardModal';
-import { incrementQuestions, getCurrentPlayer, getOtherPlayer, switchTurn, type Player } from '../utils/storage';
+import { incrementQuestions, getCurrentPlayer, switchTurn, type Player } from '../utils/storage';
 import questionsData from '../data/questions.json';
 import type { Category } from '../components/CategorySelector';
 
@@ -23,6 +23,14 @@ const categoryData = [
   { id: 'aleatorio', name: 'ALEATORIO', emoji: '🎲' },
 ];
 
+interface CardState {
+  question: Question;
+  isActive: boolean;
+  rotation: number;
+  position: number; // 0 = active (top), 1 = first in stack, 2 = second, etc.
+  hasFaded: boolean; // Track if this card has already been faded to 0.3
+}
+
 export const Game: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
@@ -33,23 +41,14 @@ export const Game: React.FC = () => {
   );
 
   const [questions, setQuestions] = useState<Question[]>([]);
-  const [currentQuestion, setCurrentQuestion] = useState<Question | null>(null);
-  const [cardStack, setCardStack] = useState<Question[]>([]);
+  const [cards, setCards] = useState<CardState[]>([]);
   const [showReward, setShowReward] = useState(false);
   const [currentReward, setCurrentReward] = useState('');
   const [currentPlayer, setCurrentPlayer] = useState<Player | null>(null);
-  const [otherPlayer, setOtherPlayer] = useState<Player | null>(null);
   const [progress, setProgress] = useState(1); // Start at 1/5 instead of 0
   const [showCategorySelection, setShowCategorySelection] = useState(true);
-  const [cardRotations, setCardRotations] = useState<Record<string, number>>({});
   const [isAnimating, setIsAnimating] = useState(false);
-  const [isRefreshing, setIsRefreshing] = useState(false);
 //   const [isResetting, setIsResetting] = useState(false);
-
-
-useEffect(() => {
-      console.log(isRefreshing, otherPlayer)
-}, [0] )
 
   // Initialize questions based on selected categories
   useEffect(() => {
@@ -57,7 +56,6 @@ useEffect(() => {
     
     // Load players info
     setCurrentPlayer(getCurrentPlayer());
-    setOtherPlayer(getOtherPlayer());
 
     
     // Get initial progress from localStorage
@@ -83,16 +81,58 @@ useEffect(() => {
     const shuffled = [...filteredQuestions].sort(() => Math.random() - 0.5);
     setQuestions(shuffled);
     
-    // Set the first question as current
+    // Set the first question as current with new card structure
     if (shuffled.length > 0) {
-      setCurrentQuestion(shuffled[0]);
-      // Store rotation for the initial question
-      setCardRotations(prev => ({
-        ...prev,
-        [shuffled[0].id]: Math.random() * 6 - 3 // Random rotation between -3 and 3 degrees
-      }));
+      const initialCard: CardState = {
+        question: shuffled[0],
+        isActive: true,
+        rotation: Math.random() * 6 - 3, // Random rotation between -3 and 3 degrees
+        position: 0, // Active card is at position 0
+        hasFaded: false // Initial card hasn't been faded yet
+      };
+      setCards([initialCard]);
     }
   }, [selectedCategories]);
+
+  // Helper functions for the new card structure
+  const getCurrentQuestion = (): Question | null => {
+    const activeCard = cards.find(card => card.isActive);
+    return activeCard ? activeCard.question : null;
+  };
+
+  const addNewCard = (question: Question) => {
+    setCards(prev => {
+      // Move all existing cards down one position and make them inactive
+      // Cards that reach position 2+ should be marked as faded
+      const updatedCards = prev.map(card => ({
+        ...card,
+        isActive: false,
+        position: card.position + 1,
+        hasFaded: card.position >= 1 ? true : card.hasFaded // Mark as faded if moving to position 2+
+      }));
+      
+      // Add the new card as active at position 0
+      const newCard: CardState = {
+        question,
+        isActive: true,
+        rotation: Math.random() * 6 - 3,
+        position: 0,
+        hasFaded: false // New active cards haven't been faded
+      };
+      
+      // Keep only the last 4 cards (active + 3 in stack)
+      // Append the new card at the end so it renders last in DOM
+      return [...updatedCards, newCard].slice(0, 4);
+    });
+  };
+
+  const refreshCurrentCard = (newQuestion: Question) => {
+    setCards(prev => prev.map(card => 
+      card.isActive 
+        ? { ...card, question: newQuestion, rotation: card.rotation } // Keep same rotation for refresh
+        : card
+    ));
+  };
 
   // const handleSwipe = () => {
   //   // Track question as answered
@@ -154,7 +194,6 @@ useEffect(() => {
     // Switch turns before loading new question
     switchTurn();
     setCurrentPlayer(getCurrentPlayer());
-    setOtherPlayer(getOtherPlayer());
     
     // Load new question from selected category
     const allQuestions = questionsData as Question[];
@@ -167,42 +206,32 @@ useEffect(() => {
     }
     
     // Get a random question that hasn't been shown yet
+    const currentQuestion = getCurrentQuestion();
     const availableQuestions = filteredQuestions.filter(q => 
-      !cardStack.some(card => card.id === q.id) && 
+      !cards.some(card => card.question.id === q.id) && 
       q.id !== currentQuestion?.id
     );
     
     if (availableQuestions.length > 0) {
       const randomQuestion = availableQuestions[Math.floor(Math.random() * availableQuestions.length)];
       
-      // Store rotation for the new question if it doesn't exist
-      if (!cardRotations[randomQuestion.id]) {
-        setCardRotations(prev => ({
-          ...prev,
-          [randomQuestion.id]: Math.random() * 6 - 3 // Random rotation between -3 and 3 degrees
-        }));
-      }
+      // Set animation state to true to prevent stack cards from fading immediately
+      setIsAnimating(true);
       
-      // 2. Card animates from bottom, then 3. Previous card fades to opacity .3
+      // Add the new card using our helper function
+      addNewCard(randomQuestion);
       
-      // Set new question first (triggers animation from bottom)
-      setCurrentQuestion(randomQuestion);
-      
-      // Then add current to stack (with a delay to ensure animation sequence)
-      if (currentQuestion) {
-        setTimeout(() => {
-          setCardStack(prev => [...prev, currentQuestion]);
-        }, 100);
-      }
-      
-      // The congratulations message is now handled directly in handleCategorySelect
-      // No need to check here again
-      
-      // Wait for new card animation to complete, then show category selection
+      // Wait for new card animation to complete, then fade stack and show category selection
       setTimeout(() => {
-        // Animation flag should already be false for new cards
+        setIsAnimating(false); // This will now trigger the stack fade after new card is in position
+        
+        // Mark all non-active cards as faded
+        setCards(prev => prev.map(card => 
+          card.isActive ? card : { ...card, hasFaded: true }
+        ));
+        
         setShowCategorySelection(true);
-      }, 1000); // Wait for spring animation to settle
+      }, 800); // Reduced from 1000ms to 800ms to match the spring animation better
     }
   };
 
@@ -211,18 +240,20 @@ useEffect(() => {
     
     // Always reset progress to 1 after any reward
     setProgress(1); // Reset to 1 as requested
-    setCardStack([]);
-    setCardRotations({}); // Clear stored rotations
+    setCards([]); // Clear all cards
     
     // Get a new random question for the next round
     const allQuestions = questionsData as Question[];
     const shuffled = [...allQuestions].sort(() => Math.random() - 0.5);
     if (shuffled.length > 0) {
-      setCurrentQuestion(shuffled[0]);
-      setCardRotations(prev => ({
-        ...prev,
-        [shuffled[0].id]: Math.random() * 6 - 3
-      }));
+      const initialCard: CardState = {
+        question: shuffled[0],
+        isActive: true,
+        rotation: Math.random() * 6 - 3,
+        position: 0,
+        hasFaded: false // Initial card after reward hasn't been faded
+      };
+      setCards([initialCard]);
     }
     
     // Show category selection for the next round
@@ -238,6 +269,7 @@ useEffect(() => {
     if (isAnimating) return;
     
     // Get the current question's category
+    const currentQuestion = getCurrentQuestion();
     const currentCategory = currentQuestion?.category;
     
     if (!currentCategory) return;
@@ -248,32 +280,16 @@ useEffect(() => {
     
     // Get available questions that haven't been shown yet (exclude current and stack)
     const availableQuestions = filteredQuestions.filter(q => 
-      !cardStack.some(card => card.id === q.id) && 
+      !cards.some(card => card.question.id === q.id) && 
       q.id !== currentQuestion?.id
     );
     
     // If we have available questions, pick a random one
     if (availableQuestions.length > 0) {
-      // 2. No card animation, h2 fades out, new content, h2 fades back in
-      
-      // Set refreshing state to true to trigger text fade animation
-      setIsRefreshing(true);
-      
       const randomQuestion = availableQuestions[Math.floor(Math.random() * availableQuestions.length)];
       
-      // Keep the exact same rotation for the card to prevent any card animation
-      setCardRotations(prev => ({
-        ...prev,
-        [randomQuestion.id]: cardRotations[currentQuestion.id] || 0 // Keep same rotation for refresh
-      }));
-      
-      // Replace current question with new one (this will trigger text animation via AnimatePresence)
-      setCurrentQuestion(randomQuestion);
-      
-      // Reset refreshing state after animation completes
-      setTimeout(() => {
-        setIsRefreshing(false);
-      }, 500);
+      // Use the refresh helper function
+      refreshCurrentCard(randomQuestion);
     } else {
       // If no available questions in this category
       console.log('No more questions available in this category');
@@ -286,6 +302,8 @@ useEffect(() => {
     localStorage.removeItem('pillowTalkPlayers');
     navigate('/setup');
   };
+
+  const currentQuestion = getCurrentQuestion();
 
   if (questions.length === 0 || !currentQuestion) {
     return (
@@ -346,136 +364,69 @@ useEffect(() => {
 
       {/* Card Stack Container */}
       <div className="relative mb-8">
-        {/* Background cards (stack effect) - positioned vertically */}
-        {cardStack.slice(-3).map((card, index) => {
-          // index 0 = first card (bottom of stack) = translateY(0)
-          // index 1 = second card = translateY(55px) 
-          // index 2 = third card (top of stack) = translateY(110px)
-          const yOffset = index * 55;
-          const rotation = cardRotations[card.id] || 0; // Use stored rotation or 0 as fallback
-          const isTopCard = index === cardStack.slice(-3).length - 1; // Check if this is the most recent card in stack
-          const opacity = isAnimating && isTopCard ? 1 : 0.3; // Keep full opacity for top card during animation
+        {/* All cards (both active and stack) rendered with unified logic */}
+        {cards.map((cardState) => {
+          // Reverse the yOffset calculation: position 0 (newest) gets highest offset
+          const yOffset = (cards.length - 1 - cardState.position) * 55;
+          const isActive = cardState.isActive;
+          // Once a card has faded, it stays at 0.3 opacity permanently
+          const opacity = isActive ? 1 : (cardState.hasFaded ? 0.3 : (isAnimating ? 1 : 0.3));
+          // Z-index: higher position = lower z-index, active card gets highest
+          const zIndex = isActive ? 10 : (10 - cardState.position);
           
           return (
-            <motion.div
-              key={`stack-${card.id}`}
-              className="absolute top-0 left-0 right-0"
-              initial={isAnimating && isTopCard ? { opacity: 1 } : undefined}
-              animate={{ opacity }}
-              transition={{ duration: 0.3, delay: isAnimating && isTopCard ? 0.7 : 0 }} // Delay fade for top card
-              style={{
-                zIndex: index,
-                transform: `translateY(${yOffset}px) rotate(${rotation}deg)`,
-                width: '100%'
-              }}
-            >
-              <div className={`w-full rounded-2xl ${categoryColors[card.category]} p-6 flex flex-col shadow-lg`}>
-                {/* Category badge */}
-                <div className="flex justify-start mb-5">
-                  <span 
-                    className="inline-block px-2 py-2 bg-white bg-opacity-20 text-white rounded-full uppercase tracking-tight"
-                    style={{ 
-                      fontFamily: 'TT Interphases Pro Mono, monospace',
-                      fontSize: '14px',
-                      fontWeight: 400,
-                      lineHeight: '157.5%',
-                      letterSpacing: '-0.89px'
-                    }}
-                  >
-                    {card.category}
-                  </span>
-                </div>
-                {/* Hidden question text and player info (for consistent height) */}
-                <div className="flex flex-col text-left mt-auto opacity-0">
-                  <h2 
-                    className="text-white text-left mb-5"
-                    style={{ 
-                      fontFamily: 'Wulkan Display, serif',
-                      fontSize: '32px',
-                      fontWeight: 300,
-                      lineHeight: '111%',
-                      letterSpacing: '-0.84px'
-                    }}
-                  >
-                    {card.question}
-                  </h2>
+            <AnimatePresence key={`card-${cardState.question.id}`} mode="wait">
+              <motion.div
+                initial={isActive && cards.length > 1 ? { 
+                  y: `calc(100dvh - 200px)`, // New active cards come from bottom
+                  opacity: 0,
+                  rotate: cardState.rotation
+                } : { 
+                  opacity: isActive ? 0 : 1, 
+                  y: yOffset,
+                  rotate: cardState.rotation
+                }}
+                animate={{ 
+                  y: yOffset,
+                  opacity: opacity,
+                  rotate: cardState.rotation
+                }}
+                exit={{ 
+                  opacity: 0.3
+                }}
+                transition={{ 
+                  type: 'spring', 
+                  stiffness: 300, 
+                  damping: 30,
+                  y: { type: 'spring', stiffness: 250, damping: 25 },
+                  opacity: { 
+                    duration: 0.4, 
+                    delay: !isActive && !isAnimating ? 0.2 : 0 
+                  }
+                }}
+                className="absolute top-0 left-0 right-0"
+                style={{ zIndex }}
+              >
+                <div className={`w-full rounded-2xl ${categoryColors[cardState.question.category]} p-6 flex flex-col shadow-lg`}>
+                  {/* Category badge */}
+                  <div className="flex justify-start mb-5">
+                    <span 
+                      className="inline-block px-2 py-2 bg-white bg-opacity-20 text-white rounded-full uppercase tracking-tight"
+                      style={{ 
+                        fontFamily: 'TT Interphases Pro Mono, monospace',
+                        fontSize: '14px',
+                        fontWeight: 400,
+                        lineHeight: '157.5%',
+                        letterSpacing: '-0.89px'
+                      }}
+                    >
+                      {cardState.question.category}
+                    </span>
+                  </div>
                   
-                  <p 
-                    className="text-white opacity-90 mt-auto"
-                    style={{ 
-                      fontFamily: 'TT Interphases Pro, sans-serif',
-                      fontSize: '16px',
-                      fontWeight: 400
-                    }}
-                  >
-                    Responde: Player
-                  </p>
-                </div>
-              </div>
-            </motion.div>
-          );
-        })}
-        
-        {/* Current active card */}
-        <AnimatePresence mode="wait">
-          {currentQuestion && (
-            <motion.div
-              key={`card-${currentQuestion.id}-${cardStack.length}`} // Key includes stack length to force animation on new cards
-              initial={cardStack.length > 0 ? { 
-                y: `calc(100dvh - 200px)`, // New cards come from bottom
-                opacity: 0,
-                rotate: cardRotations[currentQuestion.id] || 0
-              } : { 
-                opacity: 0, 
-                y: 0,
-                rotate: cardRotations[currentQuestion.id] || 0
-              }}
-              animate={{ 
-                y: Math.min(cardStack.length, 3) * 55, // Dynamic position based on stack size
-                opacity: 1,
-                rotate: cardRotations[currentQuestion.id] || 0
-              }}
-              exit={{ 
-                opacity: 0.3
-              }}
-              transition={{ 
-                type: 'spring', 
-                stiffness: 300, 
-                damping: 30,
-                y: { type: 'spring', stiffness: 250, damping: 25 }
-              }}
-              
-              className="absolute top-0 left-0 right-0"
-              style={{ zIndex: 10 }}
-            >
-                
-              <div className={`w-full rounded-2xl ${categoryColors[currentQuestion.category]} p-6 flex flex-col shadow-lg`}>
-                {/* Category badge */}
-                <div className="flex justify-start mb-5">
-                  <span 
-                    className="inline-block px-2 py-2 bg-white bg-opacity-20 text-white rounded-full uppercase tracking-tight"
-                    style={{ 
-                      fontFamily: 'TT Interphases Pro Mono, monospace',
-                      fontSize: '14px',
-                      fontWeight: 400,
-                      lineHeight: '157.5%',
-                      letterSpacing: '-0.89px'
-                    }}
-                  >
-                    {currentQuestion.category}
-                  </span>
-                </div>
-                
-                {/* Question text with animation for refresh */}
-                <div className="flex flex-col text-left mt-auto">
-                  {/* Text with separate animation for refresh vs. new card */}
-                  <AnimatePresence mode="wait">
-                    <motion.h2 
-                      key={`question-text-${currentQuestion.id}`} // This key changes on refresh
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      exit={{ opacity: 0 }}
-                      transition={{ duration: 0.3 }}
+                  {/* Question text and player info */}
+                  <div className={`flex flex-col text-left mt-auto ${!isActive ? 'opacity-0' : ''}`}>
+                    <h2 
                       className="text-white text-left mb-5"
                       style={{ 
                         fontFamily: 'Wulkan Display, serif',
@@ -485,63 +436,63 @@ useEffect(() => {
                         letterSpacing: '-0.84px'
                       }}
                     >
-                      {currentQuestion.question}
-                    </motion.h2>
-                  </AnimatePresence>
-                  
-                  {/* Player info with refresh button */}
-                  {currentPlayer && (
-                    <div className="flex flex-row justify-between items-center w-full">
-                      <p 
-                        className="text-white opacity-90 mt-auto"
-                        style={{ 
-                          fontFamily: 'TT Interphases Pro, sans-serif',
-                          fontSize: '16px',
-                          fontWeight: 400
-                        }}
-                      >
-                        Responde: {currentPlayer.name}
-                      </p>
-                      
-                      {/* Refresh button */}
-                      <motion.button
-                        onClick={(e) => {
-                          e.stopPropagation(); // Prevent card click event
-                          handleRefreshQuestion();
-                        }}
-                        whileTap={{ scale: 0.85 }}
-                        whileHover={{ rotate: 180 }}
-                        animate={{ rotate: [0, 0] }} // Default state
-                        transition={{ 
-                          rotate: { duration: 0.5 }, 
-                          scale: { duration: 0.2 }
-                        }}
-                        className="text-white opacity-80 hover:opacity-100 p-2"
-                      >
-                        <svg 
-                          xmlns="http://www.w3.org/2000/svg" 
-                          width="20" 
-                          height="20" 
-                          viewBox="0 0 24 24" 
-                          fill="none" 
-                          stroke="currentColor" 
-                          strokeWidth="2" 
-                          strokeLinecap="round" 
-                          strokeLinejoin="round" 
+                      {cardState.question.question}
+                    </h2>
+                    
+                    {/* Player info with refresh button - only show on active card */}
+                    {isActive && currentPlayer && (
+                      <div className="flex flex-row justify-between items-center w-full">
+                        <p 
+                          className="text-white opacity-90 mt-auto"
+                          style={{ 
+                            fontFamily: 'TT Interphases Pro, sans-serif',
+                            fontSize: '16px',
+                            fontWeight: 400
+                          }}
                         >
-                          <path d="M3 2v6h6"></path>
-                          <path d="M21 12A9 9 0 0 0 6 5.3L3 8"></path>
-                          <path d="M21 22v-6h-6"></path>
-                          <path d="M3 12a9 9 0 0 0 15 6.7l3-2.7"></path>
-                        </svg>
-                      </motion.button>
-                    </div>
-                  )}
+                          Responde: {currentPlayer.name}
+                        </p>
+                        
+                        {/* Refresh button */}
+                        <motion.button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleRefreshQuestion();
+                          }}
+                          whileTap={{ scale: 0.85 }}
+                          whileHover={{ rotate: 180 }}
+                          animate={{ rotate: [0, 0] }}
+                          transition={{ 
+                            rotate: { duration: 0.5 }, 
+                            scale: { duration: 0.2 }
+                          }}
+                          className="text-white opacity-80 hover:opacity-100 p-2"
+                        >
+                          <svg 
+                            xmlns="http://www.w3.org/2000/svg" 
+                            width="20" 
+                            height="20" 
+                            viewBox="0 0 24 24" 
+                            fill="none" 
+                            stroke="currentColor" 
+                            strokeWidth="2" 
+                            strokeLinecap="round" 
+                            strokeLinejoin="round" 
+                          >
+                            <path d="M3 2v6h6"></path>
+                            <path d="M21 12A9 9 0 0 0 6 5.3L3 8"></path>
+                            <path d="M21 22v-6h-6"></path>
+                            <path d="M3 12a9 9 0 0 0 15 6.7l3-2.7"></path>
+                          </svg>
+                        </motion.button>
+                      </div>
+                    )}
+                  </div>
                 </div>
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
+              </motion.div>
+            </AnimatePresence>
+          );
+        })}
       </div>
 
       {/* Category selection section - positioned at bottom of viewport */}
