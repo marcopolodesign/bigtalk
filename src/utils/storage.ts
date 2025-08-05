@@ -73,21 +73,23 @@ export const updateGameState = (newState: Partial<GameState>): void => {
   localStorage.setItem(STORAGE_KEYS.GAME_STATE, JSON.stringify(updatedState));
 };
 
-// Increment questions answered and check for rewards
+  // Increment questions answered and check for rewards
 export const incrementQuestions = (): { shouldShowReward: boolean; reward?: string } => {
   const state = getGameState();
   const newCount = state.questionsAnswered + 1;
   
   updateGameState({ questionsAnswered: newCount });
   
-  // Check if user should get a reward (every 10 questions)
-  // For now, don't show milestone rewards so we only get the congratulations at the end
-  if (newCount % 10 === 0 && newCount > 0) {
+  // Check if user should get a milestone reward (every 30 questions)
+  // We'll only show these at the end of rounds (when progress is 5/5)
+  if (newCount % 30 === 0 && newCount > 0) {
     const rewardIndex = state.currentRewardIndex % REWARDS.length;
     const reward = REWARDS[rewardIndex];
     
+    // Update the current reward index
     updateGameState({ currentRewardIndex: rewardIndex + 1 });
     
+    // Return the reward to show
     return { shouldShowReward: true, reward };
   }
   
