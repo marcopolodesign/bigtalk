@@ -81,8 +81,8 @@ export const incrementQuestions = (): { shouldShowReward: boolean; reward?: stri
   updateGameState({ questionsAnswered: newCount });
   
   // Check if user should get a reward (every 10 questions)
-  // Original logic: if (newCount % 10 === 0) {
-  if (newCount % 3 === 0) { // For testing - show rewards more frequently (every 3 questions)
+  // For now, don't show milestone rewards so we only get the congratulations at the end
+  if (newCount % 10 === 0 && newCount > 0) {
     const rewardIndex = state.currentRewardIndex % REWARDS.length;
     const reward = REWARDS[rewardIndex];
     

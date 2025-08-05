@@ -38,6 +38,7 @@ export const Game: React.FC = () => {
   const [showReward, setShowReward] = useState(false);
   const [currentReward, setCurrentReward] = useState('');
   const [currentPlayer, setCurrentPlayer] = useState<Player | null>(null);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [otherPlayer, setOtherPlayer] = useState<Player | null>(null);
   const [progress, setProgress] = useState(0); // Start at 0/5 as requested
   const [showCategorySelection, setShowCategorySelection] = useState(true);
@@ -87,16 +88,16 @@ export const Game: React.FC = () => {
     }
   }, [selectedCategories]);
 
-  const handleSwipe = () => {
-    // Track question as answered
-    const result = incrementQuestions();
-    setProgress(prev => prev + 1);
+  // const handleSwipe = () => {
+  //   // Track question as answered
+  //   const result = incrementQuestions();
+  //   setProgress(prev => prev + 1);
     
-    if (result.shouldShowReward && result.reward) {
-      setCurrentReward(result.reward);
-      setShowReward(true);
-    }
-  };
+  //   if (result.shouldShowReward && result.reward) {
+  //     setCurrentReward(result.reward);
+  //     setShowReward(true);
+  //   }
+  // };
 
   const handleCategorySelect = async (category: Category) => {
     // Fade out category selection
@@ -111,14 +112,23 @@ export const Game: React.FC = () => {
     // Calculate the next progress value
     const nextProgress = progress + 1;
     
-    // Check if this is the final (5th) question of the round
+    // Check if this will be the final question (the 5th one, index 4 in 0-based counting)
     const isCompletingRound = nextProgress === 4; // Using 0-based counting (0-4 = 5 questions)
     
     // Track question as answered
     const result = incrementQuestions();
     
-    // Check if a milestone reward should be shown (but not at the 5th question)
-    if (result.shouldShowReward && result.reward && !isCompletingRound) {
+    // Check if we should show the congratulations message (exactly at the 5th question)
+    if (isCompletingRound) {
+      console.log("Showing congratulations at 5th question (progress=4)"); // Debug message
+      setCurrentReward('¡Felicitaciones! Completaron una conversación increíble');
+      setShowReward(true);
+      setProgress(nextProgress); // Update to 4/5
+      return; // Exit early to show congratulations first
+    }
+    
+    // Check if a milestone reward should be shown (rewards from REWARDS array)
+    if (result.shouldShowReward && result.reward) {
       console.log("Showing milestone reward:", result.reward); // Debug message
       setCurrentReward(result.reward);
       setShowReward(true);
@@ -167,13 +177,8 @@ export const Game: React.FC = () => {
       }
       setCurrentQuestion(randomQuestion);
       
-      // Check if we've reached 5 questions to show congratulations
-      if (progress === 4) { // Now we check for 4 since we're using 0-based counting (0-4 = 5 questions)
-        setCurrentReward('¡Felicitaciones! Completaron una conversación increíble');
-        setShowReward(true);
-        setIsAnimating(false);
-        return;
-      }
+      // The congratulations message is now handled directly in handleCategorySelect
+      // No need to check here again
       
       // Wait for new card animation to complete, then fade previous cards and show category selection
       setTimeout(() => {
