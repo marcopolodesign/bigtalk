@@ -61,61 +61,61 @@
   },
   {
     "id": "q_011",
-    "category": "sensual",
+    "category": "picante",
     "question": "¿Qué parte de mi cuerpo te atrae más?",
     "tone": "sensual"
   },
   {
     "id": "q_012",
-    "category": "sensual",
+    "category": "picante",
     "question": "¿Qué fantasía tenés conmigo?",
     "tone": "intimate"
   },
   {
     "id": "q_013",
-    "category": "sensual",
+    "category": "picante",
     "question": "¿Qué momento íntimo conmigo no podés olvidar?",
     "tone": "warm"
   },
   {
     "id": "q_014",
-    "category": "sensual",
+    "category": "picante",
     "question": "¿Preferís ternura o intensidad en el sexo?",
     "tone": "curious"
   },
   {
     "id": "q_015",
-    "category": "sensual",
+    "category": "picante",
     "question": "¿Qué harías si estuviéramos solos y nadie pudiera vernos por una hora?",
     "tone": "teasing"
   },
   {
     "id": "q_016",
-    "category": "juguetón",
+    "category": "divertido",
     "question": "¿Qué emoji me describe mejor en la cama?",
     "tone": "sarcastic"
   },
   {
     "id": "q_017",
-    "category": "juguetón",
+    "category": "divertido",
     "question": "Si fuera un trago, ¿cuál sería mi receta?",
     "tone": "funny"
   },
   {
     "id": "q_018",
-    "category": "juguetón",
+    "category": "divertido",
     "question": "¿Qué superpoder usarías en una cita conmigo?",
     "tone": "playful"
   },
   {
     "id": "q_019",
-    "category": "juguetón",
+    "category": "divertido",
     "question": "¿Qué harías si intercambiáramos cuerpos por un día?",
     "tone": "weird-fun"
   },
   {
     "id": "q_020",
-    "category": "juguetón",
+    "category": "divertido",
     "question": "¿Qué harías si te despertaras y fueras yo?",
     "tone": "absurd"
   }

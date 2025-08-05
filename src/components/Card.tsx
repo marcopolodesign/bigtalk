@@ -1,55 +1,42 @@
 import React from 'react';
-import { motion, type PanInfo } from 'framer-motion';
+import { motion } from 'framer-motion';
 
 export interface Question {
   id: string;
-  category: 'conocernos' | 'emocional' | 'sensual' | 'juguetón';
+  category: 'conocernos' | 'emocional' | 'divertido' | 'picante';
   question: string;
   tone: string;
 }
 
 interface CardProps {
   question: Question;
-  onSwipe: () => void;
   className?: string;
+  currentPlayerName?: string;
 }
 
 const categoryColors = {
   conocernos: 'bg-conocernos text-conocernos-dark',
   emocional: 'bg-emocional text-emocional-dark',
-  sensual: 'bg-sensual text-white',
-  juguetón: 'bg-jugueton text-jugueton-dark'
+  divertido: 'bg-jugueton text-jugueton-dark',
+  picante: 'bg-sensual text-white'
 };
 
 const categoryEmojis = {
   conocernos: '🍯',
   emocional: '🌸',
-  sensual: '❤️',
-  juguetón: '🟣'
+  divertido: '🟣',
+  picante: '❤️'
 };
 
-export const Card: React.FC<CardProps> = ({ question, onSwipe, className = '' }) => {
-  const handleDragEnd = (_event: unknown, info: PanInfo) => {
-    const threshold = 100;
-    
-    if (Math.abs(info.offset.x) > threshold) {
-      onSwipe();
-    }
-  };
-
+export const Card: React.FC<CardProps> = ({ question, className = '', currentPlayerName }) => {
   return (
     <motion.div
       className={`
-        w-full max-w-sm mx-auto h-96 rounded-3xl card-shadow 
-        flex flex-col justify-center items-center p-8 cursor-grab
-        active:cursor-grabbing select-none
+        w-full max-w-sm mx-auto rounded-3xl card-shadow 
+        flex flex-col p-8 select-none
         ${categoryColors[question.category]}
         ${className}
       `}
-      drag="x"
-      dragConstraints={{ left: 0, right: 0 }}
-      onDragEnd={handleDragEnd}
-      whileDrag={{ scale: 1.05, rotate: 5 }}
       whileTap={{ scale: 0.95 }}
       initial={{ scale: 0.9, opacity: 0, y: 50 }}
       animate={{ scale: 1, opacity: 1, y: 0 }}
@@ -59,24 +46,22 @@ export const Card: React.FC<CardProps> = ({ question, onSwipe, className = '' })
       {/* Category badge */}
       <div className="absolute top-4 left-4 flex items-center space-x-2">
         <span className="text-2xl">{categoryEmojis[question.category]}</span>
-        <span className="text-sm font-medium capitalize opacity-75">
+        <span className="text-xs font-medium uppercase opacity-75 font-interphases-mono rounded-full px-3 py-1 border">
           {question.category}
         </span>
       </div>
 
       {/* Question text */}
-      <div className="text-center">
-        <p className="text-xl md:text-2xl font-serif leading-relaxed text-center">
+      <div className="text-left w-full">
+        <p className="text-xl md:text-2xl font-serif leading-relaxed text-left mb-4">
           {question.question}
+        </p>
+        <p className="text-sm font-interphases text-gray-600">
+          Responde: {currentPlayerName || 'Mateo'}
         </p>
       </div>
 
-      {/* Swipe hints */}
-      <div className="absolute bottom-4 w-full flex justify-between px-8 opacity-50">
-        <span className="text-sm">←</span>
-        <span className="text-xs">desliza</span>
-        <span className="text-sm">→</span>
-      </div>
+      {/* No swipe hints needed */}
     </motion.div>
   );
 };

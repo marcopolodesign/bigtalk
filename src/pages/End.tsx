@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
-import { getGameState, resetGameState } from '../utils/storage';
+import { getGameState, resetGameState, REWARDS } from '../utils/storage';
 
 export const End: React.FC = () => {
   const navigate = useNavigate();
@@ -40,7 +40,7 @@ export const End: React.FC = () => {
 
         {/* Title */}
         <motion.h1
-          className="text-3xl md:text-4xl font-wulkan font-bold mb-4"
+          className="text-3xl md:text-4xl font-wulkan font-light mb-4"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.4 }}
@@ -71,11 +71,35 @@ export const End: React.FC = () => {
               <span className="font-semibold">{gameState.questionsAnswered}</span>
             </div>
             <div className="flex justify-between">
-              <span>Ideas desbloqueadas:</span>
+              <span>Experiencias desbloqueadas:</span>
               <span className="font-semibold">{Math.floor(gameState.questionsAnswered / 10)}</span>
             </div>
           </div>
         </motion.div>
+        
+        {/* Unlocked Challenges */}
+        {Math.floor(gameState.questionsAnswered / 10) > 0 && (
+          <motion.div
+            className="bg-white text-gray-800 rounded-2xl p-6 mb-8"
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ delay: 1 }}
+          >
+            <h3 className="font-wulkan text-xl mb-3 text-left">Experiencias desbloqueadas:</h3>
+            <div className="space-y-4 text-left">
+              {Array.from({ length: Math.floor(gameState.questionsAnswered / 10) }).map((_, index) => {
+                // Get challenges from the REWARDS array in storage.ts using the currentRewardIndex
+                const rewardIndex = (gameState.currentRewardIndex - Math.floor(gameState.questionsAnswered / 10) + index) % REWARDS.length;
+                return (
+                  <div key={`challenge-${index}`} className="border-b border-gray-200 pb-3 last:border-b-0">
+                    <p className="text-sm font-medium">{`Desafío ${index + 1}:`}</p>
+                    <p className="text-gray-700">{REWARDS[rewardIndex]}</p>
+                  </div>
+                );
+              })}
+            </div>
+          </motion.div>
+        )}
 
         {/* Action buttons */}
         <motion.div

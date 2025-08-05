@@ -22,7 +22,7 @@ export const PlayerSetup: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 p-6">
+    <div className="min-h-screen p-6">
       {/* Header */}
       <div className="flex items-center justify-between mb-8 pt-2">
         <button

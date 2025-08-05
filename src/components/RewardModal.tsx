@@ -47,13 +47,23 @@ export const RewardModal: React.FC<RewardModalProps> = ({ isOpen, reward, onClos
 
               {/* Title */}
               <motion.h2
-                className="text-2xl font-wulkan font-bold text-gray-800 mb-4"
+                className="text-2xl font-wulkan font-light text-gray-800 mb-4"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.3 }}
               >
-                ¡Te ganaste una idea!
+                ¡Desbloquearon una experiencia!
               </motion.h2>
+
+              {/* Subtitle */}
+              <motion.p
+                className="text-sm text-purple-600 mb-4 font-medium font-interphases-mono uppercase tracking-wide"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.35 }}
+              >
+                Para profundizar su conexión
+              </motion.p>
 
               {/* Reward text */}
               <motion.p
@@ -76,7 +86,7 @@ export const RewardModal: React.FC<RewardModalProps> = ({ isOpen, reward, onClos
                 transition={{ delay: 0.5 }}
                 whileTap={{ scale: 0.95 }}
               >
-                ¡Perfecto!
+                ¡Vamos a intentarlo!
               </motion.button>
             </motion.div>
           </motion.div>

@@ -10,16 +10,16 @@ import type { Category } from '../components/CategorySelector';
 const categoryColors = {
   conocernos: 'bg-conocernos',
   emocional: 'bg-emocional',
-  sensual: 'bg-sensual',
-  juguetón: 'bg-jugueton',
+  divertido: 'bg-jugueton',
+  picante: 'bg-sensual',
   aleatorio: 'bg-gradient-to-br from-conocernos via-emocional to-sensual'
 };
 
 const categoryData = [
   { id: 'conocernos', name: 'CONOCERNOS', emoji: '🎯' },
   { id: 'emocional', name: 'EMOCIONAL', emoji: '💭' },
-  { id: 'sensual', name: 'SENSUAL', emoji: '💋' },
-  { id: 'juguetón', name: 'JUGUETÓN', emoji: '🎪' },
+  { id: 'divertido', name: 'DIVERTIDO', emoji: '🎪' },
+  { id: 'picante', name: 'PICANTE', emoji: '💋' },
   { id: 'aleatorio', name: 'ALEATORIO', emoji: '🎲' },
 ];
 
@@ -39,7 +39,7 @@ export const Game: React.FC = () => {
   const [currentReward, setCurrentReward] = useState('');
   const [currentPlayer, setCurrentPlayer] = useState<Player | null>(null);
   const [otherPlayer, setOtherPlayer] = useState<Player | null>(null);
-  const [progress, setProgress] = useState(0);
+  const [progress, setProgress] = useState(0); // Start at 0/5 as requested
   const [showCategorySelection, setShowCategorySelection] = useState(true);
   const [cardRotations, setCardRotations] = useState<Record<string, number>>({});
   const [isAnimating, setIsAnimating] = useState(false);
@@ -108,8 +108,26 @@ export const Game: React.FC = () => {
     // Start animating flag
     setIsAnimating(true);
     
-    // Increment progress when selecting next question
-    setProgress(prev => prev + 1);
+    // Calculate the next progress value
+    const nextProgress = progress + 1;
+    
+    // Check if this is the final (5th) question of the round
+    const isCompletingRound = nextProgress === 4; // Using 0-based counting (0-4 = 5 questions)
+    
+    // Track question as answered
+    const result = incrementQuestions();
+    
+    // Check if a milestone reward should be shown (but not at the 5th question)
+    if (result.shouldShowReward && result.reward && !isCompletingRound) {
+      console.log("Showing milestone reward:", result.reward); // Debug message
+      setCurrentReward(result.reward);
+      setShowReward(true);
+      setProgress(nextProgress); // Still update progress
+      return; // Exit early to show reward first
+    }
+    
+    // Update progress counter
+    setProgress(nextProgress);
     
     // Switch turns before loading new question
     switchTurn();
@@ -150,7 +168,7 @@ export const Game: React.FC = () => {
       setCurrentQuestion(randomQuestion);
       
       // Check if we've reached 5 questions to show congratulations
-      if (progress >= 5) {
+      if (progress === 4) { // Now we check for 4 since we're using 0-based counting (0-4 = 5 questions)
         setCurrentReward('¡Felicitaciones! Completaron una conversación increíble');
         setShowReward(true);
         setIsAnimating(false);
@@ -168,12 +186,23 @@ export const Game: React.FC = () => {
   const handleRewardClose = () => {
     setShowReward(false);
     
-    // Check if this was the congratulations modal (after 5 questions)
-    if (progress >= 5) {
+    // Check if this was the congratulations modal (exactly at 5 questions)
+    if (progress === 4) { // Now we check for 4 since we're using 0-based counting
       // Reset everything for a new round
-      setProgress(0);
+      setProgress(0); // Reset to 0 as requested
       setCardStack([]);
       setCardRotations({}); // Clear stored rotations
+    } else {
+      // This was a milestone reward (every 10 questions), continue with the turn change
+      switchTurn();
+      setCurrentPlayer(getCurrentPlayer());
+      setOtherPlayer(getOtherPlayer());
+      
+      // Continue the game flow (similar to handleCategorySelect but without triggering rewards again)
+      setTimeout(() => {
+        setIsAnimating(false);
+        setShowCategorySelection(true);
+      }, 300);
       
       // Get a new random question
       const allQuestions = questionsData as Question[];
@@ -211,7 +240,7 @@ export const Game: React.FC = () => {
 
   if (questions.length === 0 || !currentQuestion) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+      <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-pink-500 mx-auto mb-4"></div>
           <p className="text-gray-600">Preparando las preguntas...</p>
@@ -221,7 +250,7 @@ export const Game: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 p-4 relative">
+    <div className="min-h-screen p-4 relative">
       {/* Header */}
       <div className="flex items-center justify-between mb-6 pt-2">
         <h1 className="text-3xl font-bold text-black" style={{ fontFamily: 'Wulkan Display, serif', fontWeight: 700 }}>
@@ -267,7 +296,7 @@ export const Game: React.FC = () => {
       </div>
 
       {/* Card Stack Container */}
-      <div className="relative mb-8 h-96">
+      <div className="relative mb-8">
         {/* Background cards (stack effect) - positioned vertically */}
         {cardStack.slice(-3).map((card, index) => {
           // index 0 = first card (bottom of stack) = translateY(0)
@@ -281,18 +310,19 @@ export const Game: React.FC = () => {
           return (
             <motion.div
               key={`stack-${card.id}`}
-              className="absolute inset-0"
+              className="absolute top-0 left-0 right-0"
               initial={isAnimating && isTopCard ? { opacity: 1 } : undefined}
               animate={{ opacity }}
               transition={{ duration: 0.3, delay: isAnimating && isTopCard ? 0.7 : 0 }} // Delay fade for top card
               style={{
                 zIndex: index,
                 transform: `translateY(${yOffset}px) rotate(${rotation}deg)`,
+                width: '100%'
               }}
             >
-              <div className={`w-full h-full rounded-2xl ${categoryColors[card.category as keyof typeof categoryColors]} p-6 flex flex-col justify-between shadow-lg`}>
-                {/* Only show category badge for stacked cards */}
-                <div className="flex justify-start">
+              <div className={`w-full rounded-2xl ${categoryColors[card.category]} p-6 flex flex-col shadow-lg`}>
+                {/* Category badge */}
+                <div className="flex justify-start mb-10">
                   <span 
                     className="inline-block px-4 py-2 bg-white bg-opacity-20 text-white rounded-full uppercase tracking-tight"
                     style={{ 
@@ -306,7 +336,32 @@ export const Game: React.FC = () => {
                     {card.category}
                   </span>
                 </div>
-                {/* Rest of the card content is hidden for stack effect */}
+                {/* Hidden question text and player info (for consistent height) */}
+                <div className="flex flex-col text-left mt-auto opacity-0">
+                  <h2 
+                    className="text-white text-left mb-10"
+                    style={{ 
+                      fontFamily: 'Wulkan Display, serif',
+                      fontSize: '42px',
+                      fontWeight: 300,
+                      lineHeight: '111%',
+                      letterSpacing: '-0.84px'
+                    }}
+                  >
+                    {card.question}
+                  </h2>
+                  
+                  <p 
+                    className="text-white opacity-90 mt-auto"
+                    style={{ 
+                      fontFamily: 'TT Interphases Pro, sans-serif',
+                      fontSize: '16px',
+                      fontWeight: 400
+                    }}
+                  >
+                    Responde: Player
+                  </p>
+                </div>
               </div>
             </motion.div>
           );
@@ -338,20 +393,13 @@ export const Game: React.FC = () => {
                 rotate: { duration: 0.6 } // Smooth rotation transition
               }}
               
-              className="absolute inset-0"
+              className="absolute top-0 left-0 right-0"
               style={{ zIndex: 10 }}
-              drag="y"
-              dragConstraints={{ top: 0, bottom: 0 }}
-              onDragEnd={(_, info) => {
-                if (Math.abs(info.offset.y) > 100) {
-                  handleSwipe();
-                }
-              }}
             >
                 
-              <div className={`w-full h-full rounded-2xl ${categoryColors[currentQuestion.category as keyof typeof categoryColors]} p-6 flex flex-col justify-between shadow-lg cursor-grab active:cursor-grabbing`}>
+              <div className={`w-full rounded-2xl ${categoryColors[currentQuestion.category]} p-6 flex flex-col shadow-lg`}>
                 {/* Category badge */}
-                <div className="flex justify-start">
+                <div className="flex justify-start mb-10">
                   <span 
                     className="inline-block px-4 py-2 bg-white bg-opacity-20 text-white rounded-full uppercase tracking-tight"
                     style={{ 
@@ -367,29 +415,34 @@ export const Game: React.FC = () => {
                 </div>
                 
                 {/* Question text */}
-                <div className="flex-1 flex items-center justify-center">
+                <div className="flex flex-col text-left mt-auto">
                   <h2 
-                    className="text-white text-center"
+                    className="text-white text-left mb-10"
                     style={{ 
                       fontFamily: 'Wulkan Display, serif',
                       fontSize: '42px',
-                      fontWeight: 400,
+                      fontWeight: 300,
                       lineHeight: '111%',
                       letterSpacing: '-0.84px'
                     }}
                   >
                     {currentQuestion.question}
                   </h2>
-                </div>
-                
-                {/* Player info */}
-                {currentPlayer && otherPlayer && (
-                  <div className="text-center">
-                    <p className="text-white text-lg opacity-90">
+                  
+                  {/* Player info */}
+                  {currentPlayer && (
+                    <p 
+                      className="text-white opacity-90 mt-auto"
+                      style={{ 
+                        fontFamily: 'TT Interphases Pro, sans-serif',
+                        fontSize: '16px',
+                        fontWeight: 400
+                      }}
+                    >
                       Responde: {currentPlayer.name}
                     </p>
-                  </div>
-                )}
+                  )}
+                </div>
               </div>
             </motion.div>
           )}
@@ -405,24 +458,23 @@ export const Game: React.FC = () => {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: 50 }}
               transition={{ duration: 0.3 }}
-              className="bg-gray-50"
             >
               {/* Category selection text */}
               <div className="mb-4">
-                <p className="text-black text-lg font-medium text-center">
+                <h2 className="text-black text-lg font-thin text-left font-interphases">
                   Seleccioná la categoría de la siguiente pregunta
-                </p>
+                </h2>
               </div>
 
               {/* Category buttons */}
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-3 gap-3">
                 {categoryData.map((category) => (
                   <motion.button
                     key={category.id}
                     onClick={() => handleCategorySelect(category.id as Category)}
                     whileTap={{ scale: 0.95 }}
-                    className={`p-4 rounded-2xl text-white font-medium text-lg uppercase tracking-wide shadow-lg
-                      ${categoryColors[category.id as keyof typeof categoryColors]}`}
+                    className={`p-3 rounded-full text-white font-medium text-sm uppercase tracking-wide font-interphases-mono
+                      ${categoryColors[category.id as Category]}`}
                   >
                     {category.name}
                   </motion.button>
