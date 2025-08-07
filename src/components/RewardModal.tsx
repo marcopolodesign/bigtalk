@@ -58,7 +58,7 @@ export const RewardModal: React.FC<RewardModalProps> = ({ isOpen, reward, onClos
           
               {/* Reward text */}
               <motion.p
-                className="text-lg text-gray-700 mb-6 leading-relaxed text-interphases"
+                className="text-lg text-gray-700 mb-6 leading-relaxed font-interphases"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.4 }}
@@ -68,9 +68,9 @@ export const RewardModal: React.FC<RewardModalProps> = ({ isOpen, reward, onClos
 
               {/* Close button */}
               <motion.button
-                className="bg-emocional text-black text-interphases-mono px-8 py-3 
+                className="bg-emocional text-black font-interphases-mono px-8 py-3 
                          rounded-full font-semibold hover:from-pink-500 hover:to-purple-600 
-                         transition-all duration-200 shadow-lg"
+                         transition-all duration-200 shadow-lg uppercase"
                 onClick={onClose}
                 initial={{ opacity: 0, scale: 0.8 }}
                 animate={{ opacity: 1, scale: 1 }}
