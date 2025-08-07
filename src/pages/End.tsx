@@ -40,7 +40,7 @@ export const End: React.FC = () => {
 
         {/* Title */}
         <motion.h1
-          className="text-3xl md:text-4xl font-wulkan font-light mb-4"
+          className="text-3xl md:text-4xl font-editorial font-thin mb-4"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.4 }}
@@ -85,7 +85,7 @@ export const End: React.FC = () => {
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 1 }}
           >
-            <h3 className="font-wulkan text-xl mb-3 text-left">Experiencias desbloqueadas:</h3>
+            <h3 className="font-editorial font-thin text-xl mb-3 text-left">Experiencias desbloqueadas:</h3>
             <div className="space-y-4 text-left">
               {Array.from({ length: Math.floor(gameState.questionsAnswered / 10) }).map((_, index) => {
                 // Get challenges from the REWARDS array in storage.ts using the currentRewardIndex

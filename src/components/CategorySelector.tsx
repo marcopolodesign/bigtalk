@@ -71,7 +71,7 @@ export const CategorySelector: React.FC<CategorySelectorProps> = ({
   return (
     <div className="w-full max-w-md mx-auto p-6 space-y-6">
       <div className="text-center mb-8">
-        <h2 className="text-3xl font-wulkan font-light text-gray-800 mb-2">
+        <h2 className="text-3xl font-editorial font-thin text-gray-800 mb-2">
           Seleccioná una categoría
         </h2>
         <p className="text-gray-600 font-interphases">

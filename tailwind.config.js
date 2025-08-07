@@ -30,7 +30,7 @@ export default {
         }
       },
       fontFamily: {
-        'wulkan': ['Wulkan Display', 'serif'],
+        'editorial': ['PP Editorial New', 'Georgia', 'serif'],
         'interphases': ['TT Interphases Pro', 'sans-serif'],
         'interphases-mono': ['TT Interphases Pro Mono', 'monospace'],
         'serif': ['Georgia', 'serif'],

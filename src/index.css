@@ -21,64 +21,19 @@
   font-display: swap;
 }
 
-/* Wulkan Display Fonts */
+/* PP Editorial New Fonts */
 @font-face {
-  font-family: 'Wulkan Display';
-  src: url('/fonts/Wulkandisplay-Black.woff2') format('woff2'),
-       url('/fonts/Wulkandisplay-Black.woff') format('woff');
-  font-weight: 900;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Wulkan Display';
-  src: url('/fonts/Wulkandisplay-Bold.woff2') format('woff2'),
-       url('/fonts/Wulkandisplay-Bold.woff') format('woff');
-  font-weight: 700;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Wulkan Display';
-  src: url('/fonts/Wulkandisplay-SemiBold.woff2') format('woff2'),
-       url('/fonts/Wulkandisplay-SemiBold.woff') format('woff');
-  font-weight: 600;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Wulkan Display';
-  src: url('/fonts/Wulkandisplay-Medium.woff2') format('woff2'),
-       url('/fonts/Wulkandisplay-Medium.woff') format('woff');
-  font-weight: 500;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Wulkan Display';
-  src: url('/fonts/Wulkandisplay-Regular.woff2') format('woff2'),
-       url('/fonts/Wulkandisplay-Regular.woff') format('woff');
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Wulkan Display';
-  src: url('/fonts/Wulkandisplay-Light.woff2') format('woff2'),
-       url('/fonts/Wulkandisplay-Light.woff') format('woff');
-  font-weight: 300;
+  font-family: 'PP Editorial New';
+  src: url('/fonts/PPEditorialNew-Ultralight.woff2') format('woff2'),
+       url('/fonts/PPEditorialNew-Ultralight.woff') format('woff');
+  font-weight: 100;
   font-style: normal;
   font-display: swap;
 }
 
 @layer base {
   html {
-    font-family: 'Wulkan Display', serif;
+    font-family: 'PP Editorial New', Georgia, serif;
   }
   
   body {

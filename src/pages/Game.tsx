@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { type Question } from '../components/Card';
 import { RewardModal } from '../components/RewardModal';
+import { PillowTalkLogo } from '../components/PillowTalkLogo';
 import { incrementQuestions, getCurrentPlayer, switchTurn, type Player } from '../utils/storage';
 import questionsData from '../data/questions.json';
 import type { Category } from '../components/CategorySelector';
@@ -339,9 +340,7 @@ export const Game: React.FC = () => {
     <div className="min-h-[100dvh] p-4 relative">
       {/* Header */}
       <div className="flex items-center justify-between mb-6 pt-2">
-        <h1 className="text-3xl font-bold text-black" style={{ fontFamily: 'Wulkan Display, serif', fontWeight: 700 }}>
-          PILLOW TALK
-        </h1>
+        <PillowTalkLogo className="text-black h-8" width={130} height={32} />
         <div className="flex items-center gap-3 text-right text-black">
           <span 
             className="text-lg font-normal uppercase tracking-tight"
@@ -448,16 +447,7 @@ export const Game: React.FC = () => {
                   
                   {/* Question text and player info */}
                   <div className={`flex flex-col text-left mt-auto ${!isActive ? 'opacity-0' : ''}`}>
-                    <h2 
-                      className="text-black text-left mb-5"
-                      style={{ 
-                        fontFamily: 'Wulkan Display, serif',
-                        fontSize: '32px',
-                        fontWeight: 300,
-                        lineHeight: '111%',
-                        letterSpacing: '-0.84px'
-                      }}
-                    >
+                    <h2 className="text-black text-left mb-5 font-editorial font-thin text-3xl leading-tight tracking-tight">
                       {cardState.question.question}
                     </h2>
                     

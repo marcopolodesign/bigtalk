@@ -47,7 +47,7 @@ export const RewardModal: React.FC<RewardModalProps> = ({ isOpen, reward, onClos
 
               {/* Title */}
               <motion.h2
-                className="text-2xl font-wulkan font-light text-gray-800 mb-4"
+                className="text-2xl font-editorial font-thin text-gray-800 mb-4"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.3 }}

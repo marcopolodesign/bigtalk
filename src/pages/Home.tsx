@@ -118,7 +118,7 @@ export const Home: React.FC = () => {
       >
         {/* Logo/Title */}
         <motion.h1
-          className="text-4xl md:text-5xl font-wulkan font-light mb-4"
+          className="text-4xl md:text-5xl font-editorial font-thin mb-4"
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ delay: 0.2, duration: 0.6 }}
