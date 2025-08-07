@@ -69,13 +69,20 @@ export const RewardModal: React.FC<RewardModalProps> = ({ isOpen, reward, onClos
               {/* Close button */}
               <motion.button
                 className="bg-emocional text-black font-interphases-mono px-8 py-3 
-                         rounded-full font-semibold hover:from-pink-500 hover:to-purple-600 
+                         rounded-fullhover:from-pink-500 hover:to-purple-600 
                          transition-all duration-200 shadow-lg uppercase"
                 onClick={onClose}
                 initial={{ opacity: 0, scale: 0.8 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ delay: 0.5 }}
                 whileTap={{ scale: 0.95 }}
+                    style={{ 
+                        fontFamily: 'TT Interphases Pro Mono, monospace',
+                        fontSize: '14px',
+                        fontWeight: 400,
+                        lineHeight: '157.5%',
+                        letterSpacing: '-0.89px'
+                      }}
               >
                 Continuar con más preguntas
               </motion.button>
