@@ -432,10 +432,10 @@ export const Game: React.FC = () => {
                   {/* Category badge */}
                   <div className="flex justify-start mb-5">
                     <span 
-                      className="inline-block px-2 py-2 bg-black bg-opacity-10 text-black rounded-full uppercase tracking-tight"
+                      className="inline-block px-2 py-1 bg-black bg-opacity-10 text-black rounded-full uppercase tracking-tight"
                       style={{ 
                         fontFamily: 'TT Interphases Pro Mono, monospace',
-                        fontSize: '14px',
+                        fontSize: '11px',
                         fontWeight: 400,
                         lineHeight: '157.5%',
                         letterSpacing: '-0.89px'
