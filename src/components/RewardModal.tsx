@@ -77,7 +77,7 @@ export const RewardModal: React.FC<RewardModalProps> = ({ isOpen, reward, onClos
                 transition={{ delay: 0.5 }}
                 whileTap={{ scale: 0.95 }}
               >
-                ¡Vamos a intentarlo!
+                Continuar con más preguntas
               </motion.button>
             </motion.div>
           </motion.div>
