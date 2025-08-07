@@ -52,22 +52,13 @@ export const RewardModal: React.FC<RewardModalProps> = ({ isOpen, reward, onClos
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.3 }}
               >
-                ¡Desbloquearon una experiencia!
+                ¡Desbloquearon una experiencia  para profundizar su conexión!
               </motion.h2>
 
-              {/* Subtitle */}
-              <motion.p
-                className="text-sm text-purple-600 mb-4 font-medium font-interphases-mono uppercase tracking-wide"
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.35 }}
-              >
-                Para profundizar su conexión
-              </motion.p>
-
+          
               {/* Reward text */}
               <motion.p
-                className="text-lg text-gray-700 mb-6 leading-relaxed"
+                className="text-lg text-gray-700 mb-6 leading-relaxed text-interphases"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.4 }}
@@ -77,7 +68,7 @@ export const RewardModal: React.FC<RewardModalProps> = ({ isOpen, reward, onClos
 
               {/* Close button */}
               <motion.button
-                className="bg-gradient-to-r from-pink-400 to-purple-500 text-white px-8 py-3 
+                className="bg-emocional text-black text-interphases-mono px-8 py-3 
                          rounded-full font-semibold hover:from-pink-500 hover:to-purple-600 
                          transition-all duration-200 shadow-lg"
                 onClick={onClose}
