@@ -184,18 +184,18 @@ export const Game: React.FC = () => {
     
     // Check if we should show the congratulations message (exactly at the 5th question)
     if (isCompletingRound) {
-      console.log("Showing congratulations at 5th question (progress=4)"); // Debug message
+      console.log("Completing round at 5th question"); // Debug message
       
       // Get a random reward from the REWARDS array for the congratulations message
       const { REWARDS } = await import('../utils/storage');
       const randomIndex = Math.floor(Math.random() * REWARDS.length);
       const randomReward = REWARDS[randomIndex];
       
-      // Show the reward
+      // Store the reward but don't show modal yet
       setCurrentReward(randomReward);
-      setShowReward(true);
-      setProgress(nextProgress); // Update to 4/5
-      return; // Exit early to show congratulations first
+      setProgress(nextProgress); // Update to 5/5
+      setShowCategorySelection(true); // Show the unlock button instead
+      return; // Exit early
     }
     
     // Check if a milestone reward should be shown (rewards from REWARDS array)
@@ -279,6 +279,11 @@ export const Game: React.FC = () => {
     // Show category selection for the next round
     setIsAnimating(false);
     setShowCategorySelection(true);
+  };
+
+  // Function to handle unlock button click
+  const handleUnlockReward = () => {
+    setShowReward(true);
   };
 
   // Function to refresh the current question with another from the same category
@@ -438,7 +443,7 @@ export const Game: React.FC = () => {
                         fontSize: '11px',
                         fontWeight: 400,
                         lineHeight: '157.5%',
-                        letterSpacing: '-0.89px'
+                        // letterSpacing: '-0.89px'
                       }}
                     >
                       {cardState.question.category}
@@ -517,27 +522,45 @@ export const Game: React.FC = () => {
               exit={{ opacity: 0, y: 50 }}
               transition={{ duration: 0.3 }}
             >
-              {/* Category selection text */}
-              <div className="mb-4">
-                <h2 className="text-black text-sm font-thin text-left font-interphases">
-                  Seleccioná la categoría de la siguiente pregunta
-                </h2>
-              </div>
-
-              {/* Category buttons */}
-              <div className="flex flex-wrap gap-2">
-                {categoryData.map((category) => (
+              {progress === 5 ? (
+                // Show unlock button when at 5/5
+                <div className="text-center">
                   <motion.button
-                    key={category.id}
-                    onClick={() => handleCategorySelect(category.id as Category)}
+                    onClick={handleUnlockReward}
                     whileTap={{ scale: 0.95 }}
-                    className={`p-2 rounded-full text-white font-medium text-xs uppercase tracking-wide font-interphases-mono
-                      ${categoryButtonColors[category.id as Category]}`}
+                    className="bg-gradient-to-r from-sensual-light to-sensual text-white font-interphases-mono px-8 py-3 
+                             rounded-full font-semibold uppercase text-lg flex items-center justify-center gap-3 mx-auto mb-10"
                   >
-                    {category.name}
+                    <span className="text-2xl">🎁</span>
+                    ¡Desafío desbloqueado!
                   </motion.button>
-                ))}
-              </div>
+                </div>
+              ) : (
+                // Show normal category selection
+                <>
+                  {/* Category selection text */}
+                  <div className="mb-4">
+                    <h2 className="text-black text-sm font-thin text-left font-interphases">
+                      Seleccioná la categoría de la siguiente pregunta
+                    </h2>
+                  </div>
+
+                  {/* Category buttons */}
+                  <div className="flex flex-wrap gap-2">
+                    {categoryData.map((category) => (
+                      <motion.button
+                        key={category.id}
+                        onClick={() => handleCategorySelect(category.id as Category)}
+                        whileTap={{ scale: 0.95 }}
+                        className={`p-2 rounded-full text-white font-medium text-xs uppercase tracking-wide font-interphases-mono
+                          ${categoryButtonColors[category.id as Category]}`}
+                      >
+                        {category.name}
+                      </motion.button>
+                    ))}
+                  </div>
+                </>
+              )}
             </motion.div>
           )}
         </AnimatePresence>
