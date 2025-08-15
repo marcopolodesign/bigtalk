@@ -1,9 +1,11 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { Analytics } from '@vercel/analytics/react';
 import { Home } from './pages/Home';
 import { PlayerSetup } from './pages/PlayerSetup';
 import { Categories } from './pages/Categories';
 import { Game } from './pages/Game';
 import { End } from './pages/End';
+
 
 function App() {
   return (
@@ -16,6 +18,7 @@ function App() {
           <Route path="/game" element={<Game />} />
           <Route path="/end" element={<End />} />
         </Routes>
+        <Analytics />
       </div>
     </Router>
   );
